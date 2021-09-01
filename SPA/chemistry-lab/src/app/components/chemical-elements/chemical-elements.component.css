@@ -1,0 +1,93 @@
+#page-container{
+    background-image: url("../../../assets/blur-chemical-backg.png");
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+#full-page-container{
+    width: 100%;
+    padding: 3% 5% 4% 5%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+}
+
+#transparent-content{
+    background-color: rgba(255, 255, 255, 0.555);
+    height: 80%;
+    width: 100%;
+    display: flex;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+}
+
+#main-title{
+    font-family: 'Mate SC', serif;
+    font-size: 4vw;
+    color: rgb(60, 61, 61);
+}
+
+.square-btn{
+    margin: 10px;
+    height: 3vw;
+    width: 25vh;
+    border: 1px solid black;
+    border-radius: 20px;
+    font-family: 'Mate SC', serif;
+    font-size: 1vw;
+    background-color: rgba(255, 255, 255, 0.555);
+}
+
+.square-btn:hover {
+    margin: 10px;
+    height: 3vw;
+    width: 25vh;
+    border: 1px solid black;
+    border-radius: 20px;
+    font-family: 'Mate SC', serif;
+    font-size: 1vw;
+    background-color: #ebe0e0;
+}
+
+#menu-box{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.element-box{
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 5vw;
+    height: 7vh;
+    min-width: 15px;
+    min-height: 15px;
+    justify-content: center;
+    align-self: center;
+    text-align: center;
+    align-content: center;
+    font-family: 'Mate SC', serif;
+    font-size: 1vw;
+    margin: 2px;
+}
+
+.numeric-value-container{
+    display: flex;
+    flex-direction: inherit;
+    justify-content: space-around;
+}
+
+.group-container{
+    align-self: flex-end;
+}

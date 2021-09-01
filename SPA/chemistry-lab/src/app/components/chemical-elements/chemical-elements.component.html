@@ -1,0 +1,32 @@
+<div id="page-container">
+    <div id="full-page-container">
+        <div id="main-title">CHEMISTRY LABORATORY</div>
+        <div id="menu-box">
+            <button routerLink="/" class="square-btn">START</button>
+            <button routerLink="/compounds" class="square-btn">ZWIAZKI CHEMICZNE</button>
+        </div>
+        <div id="transparent-content">
+
+            <div *ngFor="let group of groups;">
+                <div *ngFor="let element of groupedChemicalElements"  class="group-container"> 
+                    <div *ngIf="element.group == group">
+                        <div *ngFor="let atom of element.chemicalElements">
+                          <div class="element-box">
+                              <div>
+                                  {{atom.name}}
+                              </div>
+                              <div>
+                                  {{atom.chemicalSymbol}}
+                              </div>
+                              <div class="numeric-value-container">
+                                  <div>{{atom.atomicNumber}}</div>
+                                  <div>{{atom.atomicMass}}</div>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

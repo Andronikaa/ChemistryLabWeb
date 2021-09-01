@@ -1,0 +1,57 @@
+<div id="page-container">
+    <div id="full-page-container">
+        <div id="main-title">CHEMISTRY LABORATORY</div>
+        <div id="menu-box">
+            <button routerLink="/" class="square-btn">START</button>
+            <button routerLink="/chemical-elements" class="square-btn">PIERWIASTKI</button>
+        </div>
+        <div id="transparent-content">
+            <div id="filter-box">
+                <div id="compound-name-filter">
+                    <button 
+                    *ngFor="let name of compoundsNames;let i = index" 
+                    (click)="listCompoundGroups(i)"
+                    class="option-btn"> 
+                    {{name}}
+                    </button>
+                </div>
+                <div id="compound-group-filter">
+                    <div *ngFor="let group of compoundsGroups" class="group-box">
+                        <input  type="checkbox" 
+                                class="checkbox-styled"
+                                (change)="onCheckboxChange(group)"/>
+                        <label class="description">{{group}}</label>
+                    </div>
+                </div>
+            </div>
+            <div id="table-box">
+                <table>
+                    <tr id="table-header">
+                        <th>Wzór sumaryczny</th>
+                        <th>Nazwa</th>
+                        <th>Nazwa zwyczajowa</th>
+                        <th>Wzór strukturalny</th>
+                        <th>Pierwiastki</th>
+                    </tr>
+                    <tr *ngFor="let structure of structures">
+                        <td>{{structure.molecularFormula}}</td>
+                        <td>{{structure.name}}</td>
+                        <td>{{structure.commonName}}</td>
+                        <td>
+                            <img [src]='structure.contentImage'>
+                            <!-- <div style="width: 50px; height: 50px;">x</div> -->
+                        </td>
+                        <td>
+                            <div *ngFor="let element of structure.chemicalElements" style="height: 20px;">{{element.name}}</div>
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    <button 
+                        *ngFor="let page of pagesList"
+                        (click)="changePage(page)">{{page}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
