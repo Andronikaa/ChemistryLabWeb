@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Contracts;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using MongoDbBased.API.Data;
 using MongoDbBased.API.Models;
@@ -13,10 +14,14 @@ namespace MongoDbBased.API.Services
     public class CompoundRepository : ICompoundRepository
     {
         private IMongoCollection<Compound> _compounds;
+        private readonly ILoggerManager _loggerManager;
 
-        public CompoundRepository(IMongoDatabase database)
+        public CompoundRepository(
+            IMongoDatabase database,
+            ILoggerManager loggerManager)
         {
             _compounds = database.GetCollection<Compound>(MongoCollections.COMPOUNDS);
+            _loggerManager = loggerManager;
         }
 
         public IEnumerable<Structure> GetAllStructures(GetCompoundRequest getCompoundRequest)
@@ -31,6 +36,7 @@ namespace MongoDbBased.API.Services
 
         public async Task<IEnumerable<string>> GetAllCompoundNamesAsync()
         {
+            _loggerManager.LogInfo("Processing compounds name retrieving");
             return await _compounds.Find(x => true).Project(x => x.Name).ToListAsync();
         }
 

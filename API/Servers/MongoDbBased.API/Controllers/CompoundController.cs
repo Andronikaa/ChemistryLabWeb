@@ -16,7 +16,8 @@ namespace MongoDbBased.API.Controllers
     {
         private readonly ICompoundRepository _compoundRepository;
 
-        public CompoundController(ICompoundRepository compoundRepository)
+        public CompoundController(
+            ICompoundRepository compoundRepository)
         {
             _compoundRepository = compoundRepository;
         }

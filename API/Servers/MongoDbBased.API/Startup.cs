@@ -28,6 +28,8 @@ namespace MongoDbBased.API
             services.ConfigureIISIntegration();
             services.AddAutoMapper(typeof(Startup));
             LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+            services.ConfigureLoggerService();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

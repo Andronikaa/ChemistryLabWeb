@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Contracts;
+using LoggerService;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -49,6 +51,11 @@ namespace MongoDbBased.API.Extensions
             services.AddScoped<IBenchmarkGenerator, BenchmarkGenerator>();
             services.AddScoped<IChemicalElementsRepository, ChemicalElementsRepository>();
             services.AddScoped<ICompoundRepository, CompoundRepository>();
+        }
+
+        public static void ConfigureLoggerService(this IServiceCollection services)
+        {
+            services.AddScoped<ILoggerManager, LoggerManager>();
         }
     }
 }
