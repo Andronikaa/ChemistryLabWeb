@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SQLServerBased.API.Models;
+﻿using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace SQLServerBased.API.Data
 {

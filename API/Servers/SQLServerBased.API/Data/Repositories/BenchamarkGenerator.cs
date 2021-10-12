@@ -1,7 +1,7 @@
 ﻿using Contracts;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using SQLServerBased.API.Data.Repositories.Interfaces;
-using SQLServerBased.API.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

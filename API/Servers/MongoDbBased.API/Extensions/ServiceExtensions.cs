@@ -50,7 +50,7 @@ namespace MongoDbBased.API.Extensions
         {
             services.AddScoped<IBenchmarkGenerator, BenchmarkGenerator>();
             services.AddScoped<IChemicalElementsRepository, ChemicalElementsRepository>();
-            services.AddScoped<ICompoundRepository, CompoundRepository>();
+            services.AddScoped<IMongoCompoundRepository, CompoundRepository>();
         }
 
         public static void ConfigureLoggerService(this IServiceCollection services)

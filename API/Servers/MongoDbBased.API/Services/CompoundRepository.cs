@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MongoDbBased.API.Services
 {
-    public class CompoundRepository : ICompoundRepository
+    public class CompoundRepository : IMongoCompoundRepository
     {
         private IMongoCollection<Compound> _compounds;
         private readonly ILoggerManager _loggerManager;

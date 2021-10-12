@@ -14,10 +14,10 @@ namespace MongoDbBased.API.Controllers
     [ApiController]
     public class CompoundController : ControllerBase
     {
-        private readonly ICompoundRepository _compoundRepository;
+        private readonly IMongoCompoundRepository _compoundRepository;
 
         public CompoundController(
-            ICompoundRepository compoundRepository)
+            IMongoCompoundRepository compoundRepository)
         {
             _compoundRepository = compoundRepository;
         }
