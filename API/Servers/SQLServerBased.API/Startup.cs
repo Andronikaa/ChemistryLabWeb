@@ -8,7 +8,7 @@ using Microsoft.OpenApi.Models;
 using SQLServerBased.API.Data;
 using SQLServerBased.API.Data.Repositories;
 using SQLServerBased.API.Data.Repositories.Interfaces;
-using Newtonsoft.Json;
+using SQLServerBased.API.Extensions;
 
 namespace SQLServerBased.API
 {
@@ -23,7 +23,7 @@ namespace SQLServerBased.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.ConfigureRepositoryManager();
             services.AddControllers();
              //   .AddNewtonsoftJson(options =>
              //    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore

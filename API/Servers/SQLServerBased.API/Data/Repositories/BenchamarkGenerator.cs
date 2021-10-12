@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Contracts;
+using Microsoft.EntityFrameworkCore;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using SQLServerBased.API.Models;
 using System;
@@ -14,10 +15,12 @@ namespace SQLServerBased.API.Data.Repositories
     public class BenchamarkGenerator : IBenchmarkGenerator
     {
         private readonly LaboratoryDbContext _laboratoryContext;
+        private readonly IRepositoryManager _repositoryManager;
 
-        public BenchamarkGenerator(LaboratoryDbContext context)
+        public BenchamarkGenerator(LaboratoryDbContext context, IRepositoryManager repositoryManager)
         {
             _laboratoryContext = context;
+            _repositoryManager = repositoryManager;
         }
 
         public async Task CreateAsync()
@@ -93,6 +96,7 @@ namespace SQLServerBased.API.Data.Repositories
         {
             Stopwatch time = new Stopwatch();
             time.Start();
+            _repositoryManager.Compound.GetAllCompounds(trackChanges: false);
             var chemix = await _laboratoryContext.ChemicalElements.Take(1000).ToListAsync();
             time.Stop();
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);

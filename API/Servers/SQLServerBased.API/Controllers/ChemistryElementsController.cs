@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using SQLServerBased.API.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,37 +11,45 @@ namespace SQLServerBased.API.Controllers
     [ApiController]
     public class ChemistryElementsController : ControllerBase
     {
-        private readonly IBenchmarkGenerator _chemicalElementsRepository;
+        private readonly IBenchmarkGenerator _benchmarkGenerator;
 
-        public ChemistryElementsController(IBenchmarkGenerator chemicalElementsRepository)
+        public ChemistryElementsController(IBenchmarkGenerator benchmarkGenerator)
         {
-            _chemicalElementsRepository = chemicalElementsRepository;
+            _benchmarkGenerator = benchmarkGenerator;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateChemicalElement()
         {
-            await _chemicalElementsRepository.CreateAsync();
+            await _benchmarkGenerator.CreateAsync();
             return Ok();
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ChemicalElement>>> GetChemicalElements()
         {
-            return Ok(await _chemicalElementsRepository.GetAllAsync());
+            try
+            {
+                return Ok(await _benchmarkGenerator.GetAllAsync());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+            
         }
 
         [HttpPut]
         public async Task<IActionResult> UpdateChemicalElement()
         {
-            await _chemicalElementsRepository.UpdateAsync();
+            await _benchmarkGenerator.UpdateAsync();
             return Ok();
         }
 
         [HttpDelete]
         public async Task<IActionResult> DeleteChemicalElement()
         {
-            await _chemicalElementsRepository.DeleteAsync();
+            await _benchmarkGenerator.DeleteAsync();
             return Ok();
         }
     }
