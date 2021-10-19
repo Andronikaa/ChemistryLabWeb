@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SQLServerBased.API.Models
+namespace Entities.Models
 {
     public class Compound
     {

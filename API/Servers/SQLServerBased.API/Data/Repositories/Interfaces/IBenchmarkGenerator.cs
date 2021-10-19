@@ -1,4 +1,4 @@
-﻿using SQLServerBased.API.Models;
+﻿using Entities.Dtos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,7 +6,7 @@ namespace SQLServerBased.API.Data.Repositories.Interfaces
 {
     public interface IBenchmarkGenerator
     {
-        Task<IEnumerable<ChemicalElement>> GetAllAsync();
+        IEnumerable<ChemicalElementDto> GetAllChemicalElementsAsync();
 
         Task GetAllCompundsAsync();
 

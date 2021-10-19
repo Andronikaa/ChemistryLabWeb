@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace SQLServerBased.API.Models
+namespace Entities.Models
 {
     public class CompoundCategory
     {

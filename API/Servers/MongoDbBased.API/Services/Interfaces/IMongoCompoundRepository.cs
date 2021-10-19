@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MongoDbBased.API.Services.Interfaces
 {
-    public interface ICompoundRepository
+    public interface IMongoCompoundRepository
     {
         IEnumerable<Structure> GetAllStructures(GetCompoundRequest getCompoundRequest);
 

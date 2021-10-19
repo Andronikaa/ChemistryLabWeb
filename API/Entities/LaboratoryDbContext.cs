@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SQLServerBased.API.Models;
+﻿using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace SQLServerBased.API.Data
+namespace Entities
 {
     public class LaboratoryDbContext : DbContext
     {
-        public LaboratoryDbContext(DbContextOptions<LaboratoryDbContext> options) : base (options) { }
+        public LaboratoryDbContext(DbContextOptions options) : base (options) { }
 
         public DbSet<ChemicalElement> ChemicalElements { get; set; }
 
