@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Contracts;
+using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using System;
@@ -12,10 +13,14 @@ namespace SQLServerBased.API.Controllers
     public class ChemistryElementsController : ControllerBase
     {
         private readonly IBenchmarkGenerator _benchmarkGenerator;
+        private readonly ILoggerManager _loggerManager;
 
-        public ChemistryElementsController(IBenchmarkGenerator benchmarkGenerator)
+        public ChemistryElementsController(
+            IBenchmarkGenerator benchmarkGenerator,
+            ILoggerManager loggerManager)
         {
             _benchmarkGenerator = benchmarkGenerator;
+            _loggerManager = loggerManager;
         }
 
         [HttpPost]
@@ -26,17 +31,17 @@ namespace SQLServerBased.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ChemicalElement>>> GetChemicalElements()
+        public ActionResult<IEnumerable<ChemicalElement>> GetChemicalElements()
         {
             try
             {
-                return Ok(await _benchmarkGenerator.GetAllAsync());
+                return Ok(_benchmarkGenerator.GetAllChemicalElementsAsync());
             }
             catch (Exception ex)
             {
+                _loggerManager.LogError($"Exception occured in {nameof(GetChemicalElements)} action: {ex}");
                 return StatusCode(500, "Internal server error");
             }
-            
         }
 
         [HttpPut]

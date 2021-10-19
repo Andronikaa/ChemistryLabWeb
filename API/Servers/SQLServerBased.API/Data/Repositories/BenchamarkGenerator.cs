@@ -1,4 +1,7 @@
-﻿using Contracts;
+﻿using AutoMapper;
+using Contracts;
+using Entities;
+using Entities.Dtos;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using SQLServerBased.API.Data.Repositories.Interfaces;
@@ -16,11 +19,27 @@ namespace SQLServerBased.API.Data.Repositories
     {
         private readonly LaboratoryDbContext _laboratoryContext;
         private readonly IRepositoryManager _repositoryManager;
+        private readonly IMapper _mapper;
 
-        public BenchamarkGenerator(LaboratoryDbContext context, IRepositoryManager repositoryManager)
+        public BenchamarkGenerator(
+            LaboratoryDbContext context, 
+            IRepositoryManager repositoryManager,
+            IMapper mapper)
         {
             _laboratoryContext = context;
             _repositoryManager = repositoryManager;
+            _mapper = mapper;
+        }
+
+        public IEnumerable<ChemicalElementDto> GetAllChemicalElementsAsync()
+        {
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            var chemicalElements = _repositoryManager.ChemicalElement.GetAll(trackChanges: false).Take(100);
+            time.Stop();
+            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
+            var chemicalElementsDto = _mapper.Map<IEnumerable<ChemicalElementDto>>(chemicalElements);
+            return chemicalElementsDto;
         }
 
         public async Task CreateAsync()
@@ -92,21 +111,7 @@ namespace SQLServerBased.API.Data.Repositories
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
         }
 
-        public async Task<IEnumerable<ChemicalElement>> GetAllAsync()
-        {
-            Stopwatch time = new Stopwatch();
-            time.Start();
-            _repositoryManager.Compound.GetAllCompounds(trackChanges: false);
-            var chemix = await _laboratoryContext.ChemicalElements.Take(1000).ToListAsync();
-            time.Stop();
-            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
-            return chemix;
-        }
-
-        //public async Task<IEnumerable<ChemicalElement>> GetAllAsync()
-        //{
-        //    return await _laboratoryContext.ChemicalElements.AsEnumerable();
-        //}
+       
 
         public async Task GetAllCompundsAsync()
         {
