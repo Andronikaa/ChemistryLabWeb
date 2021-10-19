@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
-    <ProjectReference Include="..\..\LoggerService\LoggerService.csproj" />
-    <ProjectReference Include="..\..\Repository\Repository.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\LoggerService\LoggerService.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Repository\Repository.csproj" />
   </ItemGroup>
 
 </Project>
