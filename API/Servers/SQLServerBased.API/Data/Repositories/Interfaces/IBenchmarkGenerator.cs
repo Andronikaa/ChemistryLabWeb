@@ -1,4 +1,5 @@
 ﻿using Entities.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,8 +7,9 @@ namespace SQLServerBased.API.Data.Repositories.Interfaces
 {
     public interface IBenchmarkGenerator
     {
-        IEnumerable<ChemicalElementDto> GetAllChemicalElementsAsync();
+        IEnumerable<ChemicalElementDto> GetAllChemicalElements();
 
+        ChemicalElementDto GetChemicalElement(int id, bool trackChanges);
         Task GetAllCompundsAsync();
 
         Task CreateAsync();

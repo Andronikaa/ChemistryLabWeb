@@ -20,18 +20,21 @@ namespace SQLServerBased.API.Data.Repositories
         private readonly LaboratoryDbContext _laboratoryContext;
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly ILoggerManager _loggerManager;
 
         public BenchamarkGenerator(
             LaboratoryDbContext context, 
             IRepositoryManager repositoryManager,
-            IMapper mapper)
+            IMapper mapper,
+            ILoggerManager loggerManager)
         {
             _laboratoryContext = context;
             _repositoryManager = repositoryManager;
             _mapper = mapper;
+            _loggerManager = loggerManager;
         }
 
-        public IEnumerable<ChemicalElementDto> GetAllChemicalElementsAsync()
+        public IEnumerable<ChemicalElementDto> GetAllChemicalElements()
         {
             Stopwatch time = new Stopwatch();
             time.Start();
@@ -40,6 +43,21 @@ namespace SQLServerBased.API.Data.Repositories
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
             var chemicalElementsDto = _mapper.Map<IEnumerable<ChemicalElementDto>>(chemicalElements);
             return chemicalElementsDto;
+        }
+
+        public ChemicalElementDto GetChemicalElement(int id, bool trackChanges)
+        {
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            var chemicalElement = _repositoryManager.ChemicalElement.Get(id, trackChanges: false);
+            time.Stop();
+            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
+
+            if (chemicalElement == null)
+                _loggerManager.LogInfo($"Chemical element with id : {id} does not exists.");
+
+            var chemicalElementDto = _mapper.Map<ChemicalElementDto>(chemicalElement);
+            return chemicalElementDto;
         }
 
         public async Task CreateAsync()
