@@ -1,4 +1,4 @@
-﻿using Entities.Models;
+﻿using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using System.Collections.Generic;
@@ -6,28 +6,29 @@ using System.Threading.Tasks;
 
 namespace SQLServerBased.API.Controllers
 {
-    [Route("api/compounds")]
+    [Route("api/{categoryId}/compounds")]
     [ApiController]
     public class CompoundController : ControllerBase
     {
         private readonly IBenchmarkGenerator _benchmarkGenerator;
 
-        public CompoundController(IBenchmarkGenerator benchmarkGenerator)
+        public CompoundController(
+            IBenchmarkGenerator benchmarkGenerator)
         {
             _benchmarkGenerator = benchmarkGenerator;
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<CompoundDto>> GetCompounds(int categoryId)
+        {
+            var compouds = _benchmarkGenerator.GetAllCompunds(categoryId, trackchanges: false);
+            return Ok(compouds);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateChemicalElement()
         {
             await _benchmarkGenerator.CreateCompundAsync();
-            return Ok();
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Compound>>> GetChemicalElements()
-        {
-            await _benchmarkGenerator.GetAllCompundsAsync();
             return Ok();
         }
 

@@ -13,11 +13,10 @@ namespace Repository
 
         }
 
-        public IEnumerable<Compound> GetAllCompounds(bool trackChanges)
+        public IEnumerable<Compound> GetAllCompounds(int categoryId, bool trackChanges)
         {
-            return FindAll(trackChanges)
-             .OrderBy(c => c.Name)
-             .ToList();
+            return FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId), trackChanges)
+             .OrderBy(c => c.Name);
         }
     }
 }

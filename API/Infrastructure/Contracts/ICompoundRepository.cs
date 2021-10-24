@@ -5,6 +5,6 @@ namespace Contracts
 {
     public interface ICompoundRepository
     {
-        IEnumerable<Compound> GetAllCompounds(bool trackChanges);
+        IEnumerable<Compound> GetAllCompounds(int categoryId, bool trackChanges);
     }
 }

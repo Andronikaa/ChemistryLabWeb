@@ -9,6 +9,7 @@ namespace SQLServerBased.API.Mappers
         public MappingProfile()
         {
             CreateMap<ChemicalElement, ChemicalElementDto>();
+            CreateMap<Compound, CompoundDto>();
         }
     }
 }

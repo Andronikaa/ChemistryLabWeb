@@ -10,7 +10,8 @@ namespace SQLServerBased.API.Data.Repositories.Interfaces
         IEnumerable<ChemicalElementDto> GetAllChemicalElements();
 
         ChemicalElementDto GetChemicalElement(int id, bool trackChanges);
-        Task GetAllCompundsAsync();
+
+        IEnumerable<CompoundDto> GetAllCompunds(int categoryId, bool trackchanges);
 
         Task CreateAsync();
 

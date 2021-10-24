@@ -1,9 +1,7 @@
 ﻿using Contracts;
 using Entities.Dtos;
-using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using SQLServerBased.API.Data.Repositories.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -24,13 +22,6 @@ namespace SQLServerBased.API.Controllers
             _loggerManager = loggerManager;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateChemicalElement()
-        {
-            await _benchmarkGenerator.CreateAsync();
-            return Ok();
-        }
-
         [HttpGet]
         public ActionResult<IEnumerable<ChemicalElementDto>> GetChemicalElements()
         {
@@ -45,6 +36,13 @@ namespace SQLServerBased.API.Controllers
                return NotFound();
             
             return chemicalElement;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateChemicalElement()
+        {
+            await _benchmarkGenerator.CreateAsync();
+            return Ok();
         }
 
         [HttpPut]
