@@ -36,7 +36,8 @@ namespace SQLServerBased.API
             services.AddScoped<ILoggerManager, LoggerManager>();
             services.AddScoped<IBenchmarkGenerator, BenchamarkGenerator>();
             
-            services.AddControllers();
+            services.AddControllers()
+                .AddCustomCSVFormatter();
              
             services.AddSwaggerGen(c =>
             {
