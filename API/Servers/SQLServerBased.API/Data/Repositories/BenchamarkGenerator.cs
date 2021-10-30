@@ -115,6 +115,7 @@ namespace SQLServerBased.API.Data.Repositories
         #region compounds
         public IEnumerable<CompoundDto> GetAllCompunds(int categoryId, bool trackChanges)
         {
+            //TODO validation for categoryId needed here
             Stopwatch time = new Stopwatch();
             time.Start();
             var compounds = _repositoryManager.Compound.GetAllCompounds(categoryId, trackChanges);
@@ -122,6 +123,19 @@ namespace SQLServerBased.API.Data.Repositories
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
 
             var compoundsDto = _mapper.Map<IEnumerable<CompoundDto>>(compounds);
+            return compoundsDto;
+        }
+
+        public CompoundDto GetCompund(int categoryId, int id, bool trackChanges)
+        {
+            //TODO validation for categoryId needed here
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            var compounds = _repositoryManager.Compound.GetCompound(categoryId, id, trackChanges);
+            time.Stop();
+            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
+
+            var compoundsDto = _mapper.Map<CompoundDto>(compounds);
             return compoundsDto;
         }
 

@@ -25,6 +25,13 @@ namespace SQLServerBased.API.Controllers
             return Ok(compouds);
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<CompoundDto>> GetCompounds(int categoryId, int id)
+        {
+            var compouds = _benchmarkGenerator.GetCompund(categoryId, id, trackchanges: false);
+            return Ok(compouds);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateChemicalElement()
         {

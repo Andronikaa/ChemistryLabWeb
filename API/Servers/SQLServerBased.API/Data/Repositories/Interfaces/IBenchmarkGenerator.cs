@@ -13,6 +13,8 @@ namespace SQLServerBased.API.Data.Repositories.Interfaces
 
         IEnumerable<CompoundDto> GetAllCompunds(int categoryId, bool trackchanges);
 
+        CompoundDto GetCompund(int categoryId, int id,  bool trackchanges);
+
         Task CreateAsync();
 
         Task CreateCompundAsync();
