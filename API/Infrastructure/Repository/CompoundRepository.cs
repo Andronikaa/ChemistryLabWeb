@@ -24,5 +24,10 @@ namespace Repository
             return FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId) && c.Id.Equals(compoundId), trackChanges)
                     .SingleOrDefault();
         }
+
+        public void CreateCompound(Compound compound)
+        {
+            Create(compound);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Entities.Dtos;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,9 +16,10 @@ namespace SQLServerBased.API.Data.Repositories.Interfaces
 
         CompoundDto GetCompund(int categoryId, int id,  bool trackchanges);
 
+        Compound CreateCompund(CompoundForCreationDto compoundDto, int compoundId);
+
         Task CreateAsync();
 
-        Task CreateCompundAsync();
 
         Task UpdateAsync();
 

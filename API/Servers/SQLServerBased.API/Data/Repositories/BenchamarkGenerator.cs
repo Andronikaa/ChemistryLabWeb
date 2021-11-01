@@ -139,28 +139,20 @@ namespace SQLServerBased.API.Data.Repositories
             return compoundsDto;
         }
 
-        public async Task CreateCompundAsync()
+        public Compound CreateCompund(CompoundForCreationDto compoundDto, int compoundId)
         {
-            var chemix = new List<Compound>();
-            var elements = await _laboratoryContext.ChemicalElements.Take(3).ToListAsync();
-            var category = await _laboratoryContext.CompoundCategories.FirstOrDefaultAsync();
-
-            for (int i = 0; i < 1000; i++)
-            {
-                chemix.Add(new Compound
-                {
-                    MolecularFormula = "formula",
-                    Name = "full name",
-                    ChemicalElements = elements,
-                    CompoundCategory = category
-                });
-            }
+            var compoundEntity = _mapper.Map<Compound>(compoundDto);
+            var category = _laboratoryContext.CompoundCategories.FirstOrDefault(c => c.Id == compoundId);
+            compoundEntity.CompoundCategory = category;
             Stopwatch time = new Stopwatch();
             time.Start();
-            _laboratoryContext.Compounds.AddRange(chemix);
-            await _laboratoryContext.SaveChangesAsync();
+            _repositoryManager.Compound.CreateCompound(compoundEntity);
+            _repositoryManager.Save();
             time.Stop();
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
+
+
+            return compoundEntity;
         }
 
         public async Task DeleteCompoundAsync()

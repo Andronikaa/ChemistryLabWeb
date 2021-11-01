@@ -6,6 +6,9 @@ namespace Contracts
     public interface ICompoundRepository
     {
         IEnumerable<Compound> GetAllCompounds(int categoryId, bool trackChanges);
+
         Compound GetCompound(int categoryId, int compoundId, bool trackChanges);
+
+        void CreateCompound(Compound compound);
     }
 }

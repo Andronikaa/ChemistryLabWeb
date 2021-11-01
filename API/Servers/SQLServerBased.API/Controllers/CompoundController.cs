@@ -26,17 +26,25 @@ namespace SQLServerBased.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<IEnumerable<CompoundDto>> GetCompounds(int categoryId, int id)
+        public ActionResult<CompoundDto> GetCompoundById(int categoryId, int id)
         {
             var compouds = _benchmarkGenerator.GetCompund(categoryId, id, trackchanges: false);
             return Ok(compouds);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateChemicalElement()
+        public IActionResult CreateCompound(int categoryId, [FromBody] CompoundForCreationDto compoundDto)
         {
-            await _benchmarkGenerator.CreateCompundAsync();
-            return Ok();
+            var compoudEntity = _benchmarkGenerator.CreateCompund(compoundDto, categoryId);
+            //not working
+            //return CreatedAtRoute(
+            //    nameof(GetCompoundById),
+            //    new { categoryId = compoudEntity.CompoundCategory.Id, id = compoudEntity.Id },
+            //    compoudEntity);
+            return CreatedAtAction(
+                nameof(GetCompoundById), 
+                new { categoryId = compoudEntity.CompoundCategory.Id, id = compoudEntity.Id }, 
+                compoudEntity);
         }
 
         [HttpPut]
