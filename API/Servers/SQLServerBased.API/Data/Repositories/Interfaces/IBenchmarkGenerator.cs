@@ -1,6 +1,5 @@
 ﻿using Entities.Dtos;
 using Entities.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -12,13 +11,13 @@ namespace SQLServerBased.API.Data.Repositories.Interfaces
 
         ChemicalElementDto GetChemicalElement(int id, bool trackChanges);
 
-        IEnumerable<CompoundDto> GetAllCompunds(int categoryId, bool trackchanges);
+        Task<IEnumerable<CompoundDto>> GetAllCompundsAsync(int categoryId, bool trackchanges);
 
-        CompoundDto GetCompund(int categoryId, int id,  bool trackchanges);
+        Task<CompoundDto> GetCompundAsync(int categoryId, int id,  bool trackchanges);
 
-        CompoundDto GetCompundsByIds(int categoryId, IEnumerable<int> ids, bool trackChanges);
+        Task<CompoundDto> GetCompundsByIdsAsync(int categoryId, IEnumerable<int> ids, bool trackChanges);
 
-        Compound CreateCompund(CompoundForCreationDto compoundDto, int compoundId);
+        Task<Compound> CreateCompundAsync(CompoundForCreationDto compoundDto, int compoundId);
 
         Task CreateAsync();
 

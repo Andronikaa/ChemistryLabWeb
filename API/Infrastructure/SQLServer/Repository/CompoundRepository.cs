@@ -1,8 +1,10 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -13,22 +15,22 @@ namespace Repository
 
         }
 
-        public IEnumerable<Compound> GetAllCompounds(int categoryId, bool trackChanges)
+        public async Task<IEnumerable<Compound>> GetAllCompoundsAsync(int categoryId, bool trackChanges)
         {
-            return FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId), trackChanges)
-             .OrderBy(c => c.Name);
+            return await FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId), trackChanges)
+             .OrderBy(c => c.Name).ToListAsync();
         }
 
-        public Compound GetCompound(int categoryId, int compoundId, bool trackChanges)
+        public async Task<Compound> GetCompoundAsync(int categoryId, int compoundId, bool trackChanges)
         {
-            return FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId) && c.Id.Equals(compoundId), trackChanges)
-                    .SingleOrDefault();
+            return await FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId) && c.Id.Equals(compoundId), trackChanges)
+                    .SingleOrDefaultAsync();
         }
 
-        public Compound GetCompoundsByIds(int categoryId, IEnumerable<int> compoundIds, bool trackChanges)
+        public async Task<Compound> GetCompoundsByIdsAsync(int categoryId, IEnumerable<int> compoundIds, bool trackChanges)
         {
-            return FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId) && compoundIds.Contains(c.Id), trackChanges)
-                    .SingleOrDefault();
+            return await FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId) && compoundIds.Contains(c.Id), trackChanges)
+                    .SingleOrDefaultAsync();
         }
 
         public void CreateCompound(Compound compound)

@@ -20,37 +20,37 @@ namespace SQLServerBased.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<CompoundDto>> GetCompounds(int categoryId)
+        public async Task<ActionResult<IEnumerable<CompoundDto>>> GetCompoundsAsync(int categoryId)
         {
-            var compouds = _benchmarkGenerator.GetAllCompunds(categoryId, trackchanges: false);
+            var compouds = await _benchmarkGenerator.GetAllCompundsAsync(categoryId, trackchanges: false);
             return Ok(compouds);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<CompoundDto> GetCompoundById(int categoryId, int id)
+        public async Task<ActionResult<CompoundDto>> GetCompoundByIdAsync(int categoryId, int id)
         {
-            var compouds = _benchmarkGenerator.GetCompund(categoryId, id, trackchanges: false);
+            var compouds = await _benchmarkGenerator.GetCompundAsync(categoryId, id, trackchanges: false);
             return Ok(compouds);
         }
 
         [HttpGet("({ids})")]
-        public ActionResult<CompoundDto> GetCompoundsByIds(int categoryId, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<int> ids)
+        public async Task<ActionResult<CompoundDto>> GetCompoundsByIdsAsync(int categoryId, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<int> ids)
         {
-            var compouds = _benchmarkGenerator.GetCompundsByIds(categoryId, ids, trackChanges: false);
+            var compouds = await _benchmarkGenerator.GetCompundsByIdsAsync(categoryId, ids, trackChanges: false);
             return Ok(compouds);
         }
 
         [HttpPost]
-        public IActionResult CreateCompound(int categoryId, [FromBody] CompoundForCreationDto compoundDto)
+        public async Task<IActionResult> CreateCompound(int categoryId, [FromBody] CompoundForCreationDto compoundDto)
         {
-            var compoudEntity = _benchmarkGenerator.CreateCompund(compoundDto, categoryId);
+            var compoudEntity =await _benchmarkGenerator.CreateCompundAsync(compoundDto, categoryId);
             //not working
             //return CreatedAtRoute(
             //    nameof(GetCompoundById),
             //    new { categoryId = compoudEntity.CompoundCategory.Id, id = compoudEntity.Id },
             //    compoudEntity);
             return CreatedAtAction(
-                nameof(GetCompoundById), 
+                nameof(GetCompoundByIdAsync), 
                 new { categoryId = compoudEntity.CompoundCategory.Id, id = compoudEntity.Id }, 
                 compoudEntity);
         }

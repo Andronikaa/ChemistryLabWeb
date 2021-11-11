@@ -113,12 +113,12 @@ namespace SQLServerBased.API.Data.Repositories
         #endregion
 
         #region compounds
-        public IEnumerable<CompoundDto> GetAllCompunds(int categoryId, bool trackChanges)
+        public async Task<IEnumerable<CompoundDto>> GetAllCompundsAsync(int categoryId, bool trackChanges)
         {
             //TODO validation for categoryId needed here
             Stopwatch time = new Stopwatch();
             time.Start();
-            var compounds = _repositoryManager.Compound.GetAllCompounds(categoryId, trackChanges);
+            var compounds = await _repositoryManager.Compound.GetAllCompoundsAsync(categoryId, trackChanges);
             time.Stop();
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
 
@@ -126,12 +126,12 @@ namespace SQLServerBased.API.Data.Repositories
             return compoundsDto;
         }
 
-        public CompoundDto GetCompund(int categoryId, int id, bool trackChanges)
+        public async Task<CompoundDto> GetCompundAsync(int categoryId, int id, bool trackChanges)
         {
             //TODO validation for categoryId needed here
             Stopwatch time = new Stopwatch();
             time.Start();
-            var compounds = _repositoryManager.Compound.GetCompound(categoryId, id, trackChanges);
+            var compounds = await _repositoryManager.Compound.GetCompoundAsync(categoryId, id, trackChanges);
             time.Stop();
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
 
@@ -139,12 +139,12 @@ namespace SQLServerBased.API.Data.Repositories
             return compoundsDto;
         }
 
-        public CompoundDto GetCompundsByIds(int categoryId, IEnumerable<int> ids, bool trackChanges)
+        public async Task<CompoundDto> GetCompundsByIdsAsync(int categoryId, IEnumerable<int> ids, bool trackChanges)
         {
             //TODO validation for categoryId needed here
             Stopwatch time = new Stopwatch();
             time.Start();
-            var compounds = _repositoryManager.Compound.GetCompoundsByIds(categoryId, ids, trackChanges);
+            var compounds = await _repositoryManager.Compound.GetCompoundsByIdsAsync(categoryId, ids, trackChanges);
             time.Stop();
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
 
@@ -152,7 +152,7 @@ namespace SQLServerBased.API.Data.Repositories
             return compoundsDto;
         }
 
-        public Compound CreateCompund(CompoundForCreationDto compoundDto, int compoundId)
+        public async Task<Compound> CreateCompundAsync(CompoundForCreationDto compoundDto, int compoundId)
         {
             //TODO validation for categoryId needed here
             var compoundEntity = _mapper.Map<Compound>(compoundDto);
@@ -161,7 +161,7 @@ namespace SQLServerBased.API.Data.Repositories
             Stopwatch time = new Stopwatch();
             time.Start();
             _repositoryManager.Compound.CreateCompound(compoundEntity);
-            _repositoryManager.Save();
+            await _repositoryManager.SaveAsync();
             time.Stop();
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
 
