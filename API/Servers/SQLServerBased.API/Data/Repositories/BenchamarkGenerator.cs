@@ -20,18 +20,22 @@ namespace SQLServerBased.API.Data.Repositories
         private readonly LaboratoryDbContext _laboratoryContext;
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly ILoggerManager _loggerManager;
 
         public BenchamarkGenerator(
             LaboratoryDbContext context, 
             IRepositoryManager repositoryManager,
-            IMapper mapper)
+            IMapper mapper,
+            ILoggerManager loggerManager)
         {
             _laboratoryContext = context;
             _repositoryManager = repositoryManager;
             _mapper = mapper;
+            _loggerManager = loggerManager;
         }
 
-        public IEnumerable<ChemicalElementDto> GetAllChemicalElementsAsync()
+        #region chemical elements
+        public IEnumerable<ChemicalElementDto> GetAllChemicalElements()
         {
             Stopwatch time = new Stopwatch();
             time.Start();
@@ -40,6 +44,36 @@ namespace SQLServerBased.API.Data.Repositories
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
             var chemicalElementsDto = _mapper.Map<IEnumerable<ChemicalElementDto>>(chemicalElements);
             return chemicalElementsDto;
+        }
+
+        public ChemicalElementDto GetChemicalElement(int id, bool trackChanges)
+        {
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            var chemicalElement = _repositoryManager.ChemicalElement.Get(id, trackChanges: false);
+            time.Stop();
+            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
+
+            if (chemicalElement == null)
+                _loggerManager.LogInfo($"Chemical element with id : {id} does not exists.");
+
+            var chemicalElementDto = _mapper.Map<ChemicalElementDto>(chemicalElement);
+            return chemicalElementDto;
+        }
+
+        public async Task UpdateAsync()
+        {
+            var chemix = _laboratoryContext.ChemicalElements.Take(1000);
+            foreach (var chem in chemix)
+            {
+                chem.Name = "Updated";
+            }
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            _laboratoryContext.ChemicalElements.UpdateRange(chemix);
+            await _laboratoryContext.SaveChangesAsync();
+            time.Stop();
+            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
         }
 
         public async Task CreateAsync()
@@ -65,30 +99,6 @@ namespace SQLServerBased.API.Data.Repositories
             Debug.WriteLine( "ms : " + time.ElapsedMilliseconds);
         }
 
-        public async Task CreateCompundAsync()
-        {
-            var chemix = new List<Compound>();
-            var elements = await _laboratoryContext.ChemicalElements.Take(3).ToListAsync();
-            var category = await _laboratoryContext.CompoundCategories.FirstOrDefaultAsync();
-
-            for (int i = 0; i < 1000; i++)
-            {
-                chemix.Add(new Compound
-                {
-                    MolecularFormula = "formula",
-                    Name = "full name",
-                    ChemicalElements = elements,
-                    CompoundCategory = category
-                });
-            }
-            Stopwatch time = new Stopwatch();
-            time.Start();
-            _laboratoryContext.Compounds.AddRange(chemix);
-            await _laboratoryContext.SaveChangesAsync();
-            time.Stop();
-            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
-        }
-
         public async Task DeleteAsync()
         {
             var chemix = _laboratoryContext.ChemicalElements.Take(10);
@@ -100,40 +110,71 @@ namespace SQLServerBased.API.Data.Repositories
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
         }
 
+        #endregion
+
+        #region compounds
+        public async Task<IEnumerable<CompoundDto>> GetAllCompundsAsync(int categoryId, bool trackChanges)
+        {
+            //TODO validation for categoryId needed here
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            var compounds = await _repositoryManager.Compound.GetAllCompoundsAsync(categoryId, trackChanges);
+            time.Stop();
+            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
+
+            var compoundsDto = _mapper.Map<IEnumerable<CompoundDto>>(compounds);
+            return compoundsDto;
+        }
+
+        public async Task<CompoundDto> GetCompundAsync(int categoryId, int id, bool trackChanges)
+        {
+            //TODO validation for categoryId needed here
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            var compounds = await _repositoryManager.Compound.GetCompoundAsync(categoryId, id, trackChanges);
+            time.Stop();
+            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
+
+            var compoundsDto = _mapper.Map<CompoundDto>(compounds);
+            return compoundsDto;
+        }
+
+        public async Task<CompoundDto> GetCompundsByIdsAsync(int categoryId, IEnumerable<int> ids, bool trackChanges)
+        {
+            //TODO validation for categoryId needed here
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            var compounds = await _repositoryManager.Compound.GetCompoundsByIdsAsync(categoryId, ids, trackChanges);
+            time.Stop();
+            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
+
+            var compoundsDto = _mapper.Map<CompoundDto>(compounds);
+            return compoundsDto;
+        }
+
+        public async Task<Compound> CreateCompundAsync(CompoundForCreationDto compoundDto, int compoundId)
+        {
+            //TODO validation for categoryId needed here
+            var compoundEntity = _mapper.Map<Compound>(compoundDto);
+            var category = _laboratoryContext.CompoundCategories.FirstOrDefault(c => c.Id == compoundId);
+            compoundEntity.CompoundCategory = category;
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            _repositoryManager.Compound.CreateCompound(compoundEntity);
+            await _repositoryManager.SaveAsync();
+            time.Stop();
+            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
+
+
+            return compoundEntity;
+        }
+
         public async Task DeleteCompoundAsync()
         {
             var chemix = _laboratoryContext.Compounds.Take(1000);
             Stopwatch time = new Stopwatch();
             time.Start();
             _laboratoryContext.Compounds.RemoveRange(chemix);
-            await _laboratoryContext.SaveChangesAsync();
-            time.Stop();
-            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
-        }
-
-       
-
-        public async Task GetAllCompundsAsync()
-        {
-            Stopwatch time = new Stopwatch();
-            time.Start();
-            var chemix = await _laboratoryContext.Compounds.Include(x => x.CompoundCategory)
-                .Include(x => x.ChemicalElements).Take(1000).ToListAsync();
-            time.Stop();
-            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
-            //return chemix;
-        }
-
-        public async Task UpdateAsync()
-        {
-            var chemix = _laboratoryContext.ChemicalElements.Take(1000);
-            foreach (var chem in chemix)
-            {
-                chem.Name = "Updated";
-            }
-            Stopwatch time = new Stopwatch();
-            time.Start();
-            _laboratoryContext.ChemicalElements.UpdateRange(chemix);
             await _laboratoryContext.SaveChangesAsync();
             time.Stop();
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
@@ -153,5 +194,6 @@ namespace SQLServerBased.API.Data.Repositories
             time.Stop();
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
         }
+        #endregion 
     }
 }

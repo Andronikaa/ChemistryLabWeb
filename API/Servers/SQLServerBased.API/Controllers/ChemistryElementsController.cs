@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Entities.Dtos;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using SQLServerBased.API.Data.Repositories.Interfaces;
@@ -23,25 +24,27 @@ namespace SQLServerBased.API.Controllers
             _loggerManager = loggerManager;
         }
 
+        [HttpGet]
+        public ActionResult<IEnumerable<ChemicalElementDto>> GetChemicalElements()
+        {
+            return Ok(_benchmarkGenerator.GetAllChemicalElements());
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<ChemicalElementDto> GetChemicalElement(int id)
+        {
+            var chemicalElement = _benchmarkGenerator.GetChemicalElement(id, trackChanges: false);
+            if (chemicalElement == null)
+               return NotFound();
+            
+            return chemicalElement;
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateChemicalElement()
         {
             await _benchmarkGenerator.CreateAsync();
             return Ok();
-        }
-
-        [HttpGet]
-        public ActionResult<IEnumerable<ChemicalElement>> GetChemicalElements()
-        {
-            try
-            {
-                return Ok(_benchmarkGenerator.GetAllChemicalElementsAsync());
-            }
-            catch (Exception ex)
-            {
-                _loggerManager.LogError($"Exception occured in {nameof(GetChemicalElements)} action: {ex}");
-                return StatusCode(500, "Internal server error");
-            }
         }
 
         [HttpPut]
