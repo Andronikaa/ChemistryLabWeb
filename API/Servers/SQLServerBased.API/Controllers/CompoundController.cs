@@ -1,34 +1,58 @@
-﻿using Entities.Models;
+﻿using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using SQLServerBased.API.Data.Repositories.Interfaces;
+using SQLServerBased.API.ModelBinders;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SQLServerBased.API.Controllers
 {
-    [Route("api/compounds")]
+    [Route("api/{categoryId}/compounds")]
     [ApiController]
     public class CompoundController : ControllerBase
     {
         private readonly IBenchmarkGenerator _benchmarkGenerator;
 
-        public CompoundController(IBenchmarkGenerator benchmarkGenerator)
+        public CompoundController(
+            IBenchmarkGenerator benchmarkGenerator)
         {
             _benchmarkGenerator = benchmarkGenerator;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateChemicalElement()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CompoundDto>>> GetCompoundsAsync(int categoryId)
         {
-            await _benchmarkGenerator.CreateCompundAsync();
-            return Ok();
+            var compouds = await _benchmarkGenerator.GetAllCompundsAsync(categoryId, trackchanges: false);
+            return Ok(compouds);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Compound>>> GetChemicalElements()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CompoundDto>> GetCompoundByIdAsync(int categoryId, int id)
         {
-            await _benchmarkGenerator.GetAllCompundsAsync();
-            return Ok();
+            var compouds = await _benchmarkGenerator.GetCompundAsync(categoryId, id, trackchanges: false);
+            return Ok(compouds);
+        }
+
+        [HttpGet("({ids})")]
+        public async Task<ActionResult<CompoundDto>> GetCompoundsByIdsAsync(int categoryId, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<int> ids)
+        {
+            var compouds = await _benchmarkGenerator.GetCompundsByIdsAsync(categoryId, ids, trackChanges: false);
+            return Ok(compouds);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCompound(int categoryId, [FromBody] CompoundForCreationDto compoundDto)
+        {
+            var compoudEntity =await _benchmarkGenerator.CreateCompundAsync(compoundDto, categoryId);
+            //not working
+            //return CreatedAtRoute(
+            //    nameof(GetCompoundById),
+            //    new { categoryId = compoudEntity.CompoundCategory.Id, id = compoudEntity.Id },
+            //    compoudEntity);
+            return CreatedAtAction(
+                nameof(GetCompoundByIdAsync), 
+                new { categoryId = compoudEntity.CompoundCategory.Id, id = compoudEntity.Id }, 
+                compoudEntity);
         }
 
         [HttpPut]
@@ -38,12 +62,13 @@ namespace SQLServerBased.API.Controllers
             return Ok();
         }
 
+        //TODO add patch later
+
         [HttpDelete]
         public async Task<IActionResult> DeleteChemicalElement()
         {
             await _benchmarkGenerator.DeleteCompoundAsync();
             return Ok();
         }
-
     }
 }
