@@ -2,6 +2,7 @@
 using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using SQLServerBased.API.Data.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -43,6 +44,20 @@ namespace SQLServerBased.API.Controllers
         {
             await _benchmarkGenerator.CreateAsync();
             return Ok();
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<ChemicalElement>> GetChemicalElements()
+        {
+            try
+            {
+                return Ok(_benchmarkGenerator.GetAllChemicalElementsAsync());
+            }
+            catch (Exception ex)
+            {
+                _loggerManager.LogError($"Exception occured in {nameof(GetChemicalElements)} action: {ex}");
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPut]
