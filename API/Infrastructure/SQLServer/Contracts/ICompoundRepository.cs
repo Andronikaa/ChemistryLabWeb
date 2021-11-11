@@ -9,6 +9,8 @@ namespace Contracts
 
         Compound GetCompound(int categoryId, int compoundId, bool trackChanges);
 
+        Compound GetCompoundsByIds(int categoryId, IEnumerable<int> compoundIds, bool trackChanges);
+
         void CreateCompound(Compound compound);
     }
 }

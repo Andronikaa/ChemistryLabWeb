@@ -139,8 +139,22 @@ namespace SQLServerBased.API.Data.Repositories
             return compoundsDto;
         }
 
+        public CompoundDto GetCompundsByIds(int categoryId, IEnumerable<int> ids, bool trackChanges)
+        {
+            //TODO validation for categoryId needed here
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            var compounds = _repositoryManager.Compound.GetCompoundsByIds(categoryId, ids, trackChanges);
+            time.Stop();
+            Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
+
+            var compoundsDto = _mapper.Map<CompoundDto>(compounds);
+            return compoundsDto;
+        }
+
         public Compound CreateCompund(CompoundForCreationDto compoundDto, int compoundId)
         {
+            //TODO validation for categoryId needed here
             var compoundEntity = _mapper.Map<Compound>(compoundDto);
             var category = _laboratoryContext.CompoundCategories.FirstOrDefault(c => c.Id == compoundId);
             compoundEntity.CompoundCategory = category;

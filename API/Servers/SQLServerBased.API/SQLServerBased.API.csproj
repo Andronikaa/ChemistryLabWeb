@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.11">
       <PrivateAssets>all</PrivateAssets>
@@ -16,13 +17,15 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NLog" Version="4.7.12" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\Contracts\Contracts.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\LoggerService\LoggerService.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Repository\Repository.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SQLServer\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SQLServer\Entities\Entities.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SQLServer\LoggerService\LoggerService.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SQLServer\Repository\Repository.csproj" />
   </ItemGroup>
 
 </Project>

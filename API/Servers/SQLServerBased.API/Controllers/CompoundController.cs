@@ -1,6 +1,7 @@
 ﻿using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using SQLServerBased.API.Data.Repositories.Interfaces;
+using SQLServerBased.API.ModelBinders;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -32,6 +33,13 @@ namespace SQLServerBased.API.Controllers
             return Ok(compouds);
         }
 
+        [HttpGet("({ids})")]
+        public ActionResult<CompoundDto> GetCompoundsByIds(int categoryId, [ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<int> ids)
+        {
+            var compouds = _benchmarkGenerator.GetCompundsByIds(categoryId, ids, trackChanges: false);
+            return Ok(compouds);
+        }
+
         [HttpPost]
         public IActionResult CreateCompound(int categoryId, [FromBody] CompoundForCreationDto compoundDto)
         {
@@ -54,12 +62,13 @@ namespace SQLServerBased.API.Controllers
             return Ok();
         }
 
+        //TODO add patch later
+
         [HttpDelete]
         public async Task<IActionResult> DeleteChemicalElement()
         {
             await _benchmarkGenerator.DeleteCompoundAsync();
             return Ok();
         }
-
     }
 }

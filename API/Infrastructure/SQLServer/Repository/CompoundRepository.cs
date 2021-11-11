@@ -25,6 +25,12 @@ namespace Repository
                     .SingleOrDefault();
         }
 
+        public Compound GetCompoundsByIds(int categoryId, IEnumerable<int> compoundIds, bool trackChanges)
+        {
+            return FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId) && compoundIds.Contains(c.Id), trackChanges)
+                    .SingleOrDefault();
+        }
+
         public void CreateCompound(Compound compound)
         {
             Create(compound);

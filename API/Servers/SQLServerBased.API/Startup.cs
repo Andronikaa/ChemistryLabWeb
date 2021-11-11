@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using NLog;
-using SQLServerBased.API.Data;
 using SQLServerBased.API.Data.Repositories;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using SQLServerBased.API.Extensions;
@@ -39,7 +38,7 @@ namespace SQLServerBased.API
             services.AddControllers(options =>
             {
                 options.SuppressAsyncSuffixInActionNames = false;
-            }).AddCustomCSVFormatter();
+            }).AddNewtonsoftJson().AddCustomCSVFormatter();
              
             services.AddSwaggerGen(c =>
             {

@@ -16,6 +16,8 @@ namespace SQLServerBased.API.Data.Repositories.Interfaces
 
         CompoundDto GetCompund(int categoryId, int id,  bool trackchanges);
 
+        CompoundDto GetCompundsByIds(int categoryId, IEnumerable<int> ids, bool trackChanges);
+
         Compound CreateCompund(CompoundForCreationDto compoundDto, int compoundId);
 
         Task CreateAsync();
