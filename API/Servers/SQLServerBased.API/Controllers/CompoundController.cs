@@ -1,5 +1,6 @@
 ﻿using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using SQLServerBased.API.ActionFilters;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using SQLServerBased.API.ModelBinders;
 using System.Collections.Generic;
@@ -41,6 +42,7 @@ namespace SQLServerBased.API.Controllers
         }
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateCompound(int categoryId, [FromBody] CompoundForCreationDto compoundDto)
         {
             var compoudEntity =await _benchmarkGenerator.CreateCompundAsync(compoundDto, categoryId);

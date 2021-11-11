@@ -1,18 +1,22 @@
 using Contracts;
 using Entities;
+using FluentValidation.AspNetCore;
 using LoggerService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using NLog;
+using SQLServerBased.API.ActionFilters;
 using SQLServerBased.API.Data.Repositories;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using SQLServerBased.API.Extensions;
 using System.IO;
+using System.Reflection;
 
 namespace SQLServerBased.API
 {
@@ -32,12 +36,21 @@ namespace SQLServerBased.API
             services.AddDbContext<LaboratoryDbContext>(
                options => options.UseSqlServer(Configuration.GetConnectionString("ChemistryLabDatabase")));
             services.ConfigureRepositoryManager();
+            services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ILoggerManager, LoggerManager>();
             services.AddScoped<IBenchmarkGenerator, BenchamarkGenerator>();
-            
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.AddControllers(options =>
             {
                 options.SuppressAsyncSuffixInActionNames = false;
+            }).AddFluentValidation(opt =>
+            {
+                opt.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             }).AddNewtonsoftJson().AddCustomCSVFormatter();
              
             services.AddSwaggerGen(c =>
