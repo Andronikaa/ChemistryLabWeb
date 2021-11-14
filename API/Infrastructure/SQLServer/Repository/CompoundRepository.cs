@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Models;
+using Entities.RequestFeatures;
+using Entities.RequestModels;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +17,13 @@ namespace Repository
 
         }
 
-        public async Task<IEnumerable<Compound>> GetAllCompoundsAsync(int categoryId, bool trackChanges)
+        public async Task<PagedList<Compound>> GetAllCompoundsAsync(int categoryId, CompoundParams compoundParams, bool trackChanges)
         {
-            return await FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId), trackChanges)
+            var compounds = await FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId), trackChanges)
              .OrderBy(c => c.Name).ToListAsync();
+
+            return PagedList<Compound>
+                .ToPagedList(compounds, compoundParams.PageNumber, compoundParams.PageSize);
         }
 
         public async Task<Compound> GetCompoundAsync(int categoryId, int compoundId, bool trackChanges)

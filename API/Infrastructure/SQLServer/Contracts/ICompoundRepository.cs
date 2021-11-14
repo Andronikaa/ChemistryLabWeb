@@ -1,4 +1,6 @@
 ﻿using Entities.Models;
+using Entities.RequestFeatures;
+using Entities.RequestModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,7 +8,7 @@ namespace Contracts
 {
     public interface ICompoundRepository
     {
-        Task<IEnumerable<Compound>> GetAllCompoundsAsync(int categoryId, bool trackChanges);
+        Task<PagedList<Compound>> GetAllCompoundsAsync(int categoryId, CompoundParams compoundParams, bool trackChanges);
 
         Task<Compound> GetCompoundAsync(int categoryId, int compoundId, bool trackChanges);
 

@@ -1,5 +1,8 @@
-﻿using Entities.Dtos;
+﻿using AutoMapper;
+using Entities.Dtos;
+using Entities.RequestModels;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SQLServerBased.API.ActionFilters;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using SQLServerBased.API.ModelBinders;
@@ -13,17 +16,23 @@ namespace SQLServerBased.API.Controllers
     public class CompoundController : ControllerBase
     {
         private readonly IBenchmarkGenerator _benchmarkGenerator;
+        private readonly IMapper _mapper;
 
         public CompoundController(
-            IBenchmarkGenerator benchmarkGenerator)
+            IBenchmarkGenerator benchmarkGenerator,
+            IMapper mapper)
         {
             _benchmarkGenerator = benchmarkGenerator;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CompoundDto>>> GetCompoundsAsync(int categoryId)
+        public async Task<ActionResult<IEnumerable<CompoundDto>>> GetCompoundsAsync(int categoryId, [FromQuery] CompoundParams compoundParams)
         {
-            var compouds = await _benchmarkGenerator.GetAllCompundsAsync(categoryId, trackchanges: false);
+            var compouds = await _benchmarkGenerator.GetAllCompundsAsync(categoryId, compoundParams, trackchanges: false);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(compouds.MetaData));
+
+            _mapper.Map<IEnumerable<CompoundDto>>(compouds);
             return Ok(compouds);
         }
 
