@@ -4,6 +4,7 @@ using Entities.Models;
 using Entities.RequestFeatures;
 using Entities.RequestModels;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +21,9 @@ namespace Repository
         public async Task<PagedList<Compound>> GetAllCompoundsAsync(int categoryId, CompoundParams compoundParams, bool trackChanges)
         {
             var compounds = await FindByCondition(c => c.CompoundCategory.Id.Equals(categoryId), trackChanges)
-             .OrderBy(c => c.Name).ToListAsync();
+             .Search(compoundParams.SearchText)
+             .OrderBy(c => c.Name)
+             .ToListAsync();
 
             return PagedList<Compound>
                 .ToPagedList(compounds, compoundParams.PageNumber, compoundParams.PageSize);

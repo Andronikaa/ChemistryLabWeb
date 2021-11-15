@@ -32,8 +32,8 @@ namespace SQLServerBased.API.Controllers
             var compouds = await _benchmarkGenerator.GetAllCompundsAsync(categoryId, compoundParams, trackchanges: false);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(compouds.MetaData));
 
-            _mapper.Map<IEnumerable<CompoundDto>>(compouds);
-            return Ok(compouds);
+           var compoundDto = _mapper.Map<IEnumerable<CompoundDto>>(compouds);
+            return Ok(compoundDto);
         }
 
         [HttpGet("{id}")]
