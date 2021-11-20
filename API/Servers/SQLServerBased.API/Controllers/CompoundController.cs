@@ -11,8 +11,10 @@ using System.Threading.Tasks;
 
 namespace SQLServerBased.API.Controllers
 {
-    [Route("api/{categoryId}/compounds")]
+    [ApiVersion("1.0")]
+    [Route("api/{v:apiversion}/{categoryId}/compounds")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class CompoundController : ControllerBase
     {
         private readonly IBenchmarkGenerator _benchmarkGenerator;
