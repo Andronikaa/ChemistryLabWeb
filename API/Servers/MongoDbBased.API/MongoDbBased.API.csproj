@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\SQLServer\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SQLServer\LoggerService\LoggerService.csproj" />
     <ProjectReference Include="..\..\LoggerService\LoggerService.csproj" />
   </ItemGroup>
 

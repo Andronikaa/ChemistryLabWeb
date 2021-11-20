@@ -3,6 +3,8 @@ using Contracts;
 using Entities;
 using Entities.Dtos;
 using Entities.Models;
+using Entities.RequestFeatures;
+using Entities.RequestModels;
 using Microsoft.EntityFrameworkCore;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using System;
@@ -113,18 +115,18 @@ namespace SQLServerBased.API.Data.Repositories
         #endregion
 
         #region compounds
-        public async Task<IEnumerable<CompoundDto>> GetAllCompundsAsync(int categoryId, bool trackChanges)
+        public async Task<PagedList<Compound>> GetAllCompundsAsync(int categoryId, CompoundParams compoundParams, bool trackChanges)
         {
             //TODO validation for categoryId needed here
             Stopwatch time = new Stopwatch();
             time.Start();
-            var compounds = await _repositoryManager.Compound.GetAllCompoundsAsync(categoryId, trackChanges);
+            var compounds = await _repositoryManager.Compound.GetAllCompoundsAsync(categoryId, compoundParams, trackChanges);
             time.Stop();
             Debug.WriteLine("ms : " + time.ElapsedMilliseconds);
-
-            var compoundsDto = _mapper.Map<IEnumerable<CompoundDto>>(compounds);
-            return compoundsDto;
-        }
+            
+            //var compoundsDto = _mapper.Map<IEnumerable<CompoundDto>>(compounds);
+            return compounds;
+            }
 
         public async Task<CompoundDto> GetCompundAsync(int categoryId, int id, bool trackChanges)
         {
