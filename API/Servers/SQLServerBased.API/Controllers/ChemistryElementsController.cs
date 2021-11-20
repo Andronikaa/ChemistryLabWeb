@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace SQLServerBased.API.Controllers
 {
-    [Route("api/chemistry-elements")]
+    [ApiVersion("1.0")]
+    [Route("api/{v:apiversion}/chemistry-elements")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "v1")]
     public class ChemistryElementsController : ControllerBase
     {
         private readonly IBenchmarkGenerator _benchmarkGenerator;

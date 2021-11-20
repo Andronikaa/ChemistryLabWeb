@@ -1,5 +1,7 @@
 ﻿using Entities.Dtos;
 using Entities.Models;
+using Entities.RequestFeatures;
+using Entities.RequestModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,7 +13,7 @@ namespace SQLServerBased.API.Data.Repositories.Interfaces
 
         ChemicalElementDto GetChemicalElement(int id, bool trackChanges);
 
-        Task<IEnumerable<CompoundDto>> GetAllCompundsAsync(int categoryId, bool trackchanges);
+        Task<PagedList<Compound>> GetAllCompundsAsync(int categoryId, CompoundParams compoundParams, bool trackchanges);
 
         Task<CompoundDto> GetCompundAsync(int categoryId, int id,  bool trackchanges);
 
