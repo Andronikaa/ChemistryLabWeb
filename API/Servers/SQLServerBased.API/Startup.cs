@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using Contracts;
 using Entities;
 using FluentValidation.AspNetCore;
@@ -41,6 +42,10 @@ namespace SQLServerBased.API
             services.AddScoped<ILoggerManager, LoggerManager>();
             services.AddScoped<IBenchmarkGenerator, BenchamarkGenerator>();
 
+            services.AddMemoryCache();
+            services.ConfigureRateLimitOptions();
+            services.AddHttpContextAccessor();
+
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
@@ -77,7 +82,7 @@ namespace SQLServerBased.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseIpRateLimiting();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
