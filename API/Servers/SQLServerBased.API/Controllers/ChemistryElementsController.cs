@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities.Dtos;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using System;
@@ -26,7 +27,7 @@ namespace SQLServerBased.API.Controllers
             _loggerManager = loggerManager;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public ActionResult<IEnumerable<ChemicalElementDto>> GetChemicalElements()
         {
             return Ok(_benchmarkGenerator.GetAllChemicalElements());

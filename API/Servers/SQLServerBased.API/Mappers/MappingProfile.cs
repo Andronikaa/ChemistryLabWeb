@@ -11,6 +11,7 @@ namespace SQLServerBased.API.Mappers
             CreateMap<ChemicalElement, ChemicalElementDto>();
             CreateMap<Compound, CompoundDto>();
             CreateMap<CompoundForCreationDto, Compound>();
+            CreateMap<UserForRegistrationDto, User>();
         }
     }
 }

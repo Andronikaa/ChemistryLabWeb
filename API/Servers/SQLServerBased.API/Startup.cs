@@ -16,6 +16,7 @@ using SQLServerBased.API.ActionFilters;
 using SQLServerBased.API.Data.Repositories;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using SQLServerBased.API.Extensions;
+using SQLServerBased.API.Services;
 using System.IO;
 using System.Reflection;
 
@@ -36,11 +37,12 @@ namespace SQLServerBased.API
             services.AddAutoMapper(typeof(Startup));
             LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             services.AddDbContext<LaboratoryDbContext>(
-               options => options.UseSqlServer(Configuration.GetConnectionString("ChemistryLabDatabase")));
+               options => options.UseSqlServer(Configuration.GetConnectionString("ChemistryLabDatabase"), b => b.MigrationsAssembly("SQLServerBased.API")));
             services.ConfigureRepositoryManager();
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ILoggerManager, LoggerManager>();
             services.AddScoped<IBenchmarkGenerator, BenchamarkGenerator>();
+            services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 
             services.AddMemoryCache();
             services.ConfigureRateLimitOptions();
@@ -50,6 +52,10 @@ namespace SQLServerBased.API
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
+
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
 
             services.AddControllers(options =>
             {
@@ -83,6 +89,7 @@ namespace SQLServerBased.API
 
             app.UseRouting();
             app.UseIpRateLimiting();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
