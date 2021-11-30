@@ -17,6 +17,7 @@ using SQLServerBased.API.Data.Repositories;
 using SQLServerBased.API.Data.Repositories.Interfaces;
 using SQLServerBased.API.Extensions;
 using SQLServerBased.API.Services;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -69,6 +70,29 @@ namespace SQLServerBased.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SQLServerBased.API", Version = "v1" });
                 c.SwaggerDoc("v2", new OpenApiInfo { Title = "SQLServerBased.API", Version = "v2" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "JWT Token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {{
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                        },
+                         Name = "Bearer",
+                        },
+                        new List<string>()
+                        }});
             });
         }
 
